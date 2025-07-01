@@ -43,7 +43,7 @@ export default function JenjangAKPage() {
     <div className="p-8 flex flex-col gap-10 bg-gradient-to-br from-blue-50 via-white to-yellow-50 min-h-screen">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-8 mb-4">
-        <div className="bg-gradient-to-br from-blue-200 to-blue-100 rounded-2xl p-8 flex items-center gap-6 shadow-lg border-2 border-yellow-400">
+        <div className="bg-gradient-to-br from-blue-200 to-blue-100 rounded-2xl p-8 flex items-center gap-6 shadow-lg border-2 border-blue-200">
           <FiUsers className="text-4xl text-blue-700 drop-shadow" />
           <div>
             <div className="text-3xl font-extrabold text-blue-900">{jenjangData.reduce((a,b)=>a+b.value,0)}</div>
@@ -51,7 +51,7 @@ export default function JenjangAKPage() {
           </div>
         </div>
         {jenjangData.map((j, idx) => (
-          <div key={j.name} className={`bg-gradient-to-br from-blue-100 to-yellow-50 rounded-2xl p-8 flex items-center gap-6 shadow-lg border-2 border-yellow-400`}>
+          <div key={j.name} className={`bg-gradient-to-br from-blue-100 to-white rounded-2xl p-8 flex items-center gap-6 shadow-lg border-2 border-blue-200`}>
             {idx===0 && <FiBarChart2 className="text-4xl text-blue-600 drop-shadow" />}
             {idx===1 && <FiPieChart className="text-4xl text-pink-600 drop-shadow" />}
             {idx===2 && <FiBarChart2 className="text-4xl text-yellow-600 drop-shadow" />}
@@ -65,7 +65,7 @@ export default function JenjangAKPage() {
       </div>
 
       {/* Grafik Bar Jenjang */}
-      <div className="bg-white/90 rounded-2xl shadow-xl p-8 flex flex-col items-center border-t-4 border-2 border-yellow-400 relative overflow-hidden">
+      <div className="bg-white/90 rounded-2xl shadow-xl p-8 flex flex-col items-center border-t-4 border-2 border-blue-200 relative overflow-hidden">
         <h3 className="font-bold text-xl mb-4 text-blue-900 z-10">Bar Chart Jumlah AK per Jenjang</h3>
         <div className="w-full h-64 flex items-center justify-center text-gray-400 z-10">
           <ResponsiveContainer width="100%" height={220}>
@@ -85,30 +85,30 @@ export default function JenjangAKPage() {
 
       {/* Button Input */}
       <div className="flex justify-end mb-4">
-        <button className="flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-yellow-200 font-semibold px-4 py-2 rounded-lg shadow border-2 border-yellow-400 transition" onClick={() => alert('Fitur tambah data belum diimplementasikan.')}> <FiUserPlus /> Tambah Data Analis Kebijakan </button>
+        <button className="flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-2 rounded-lg shadow border-2 border-blue-200 transition" onClick={() => alert('Fitur tambah data belum diimplementasikan.')}> <FiUserPlus /> Tambah Data Analis Kebijakan </button>
       </div>
 
       {/* Table */}
-      <div className="bg-white/90 rounded-2xl shadow-xl p-8 overflow-x-auto border-2 border-yellow-400">
-        <h3 className="font-bold text-xl mb-4 text-yellow-700">Tabel Data Jenjang AK</h3>
-        <table className="min-w-full text-left border border-yellow-400 rounded-xl overflow-hidden">
-          <thead className="bg-yellow-100 border-b-2 border-yellow-400">
+      <div className="bg-white/90 rounded-2xl shadow-xl p-8 overflow-x-auto border-2 border-blue-200">
+        <h3 className="font-bold text-xl mb-4 text-blue-700">Tabel Data Jenjang AK</h3>
+        <table className="min-w-full text-left border border-blue-200 rounded-xl overflow-hidden">
+          <thead className="bg-blue-100 border-b-2 border-blue-200">
             <tr>
-              <th className="py-2 px-4 border-b border-yellow-200 text-blue-900">No</th>
-              <th className="py-2 px-4 border-b border-yellow-200 text-blue-900">Nama</th>
-              <th className="py-2 px-4 border-b border-yellow-200 text-blue-900">Jenjang</th>
-              <th className="py-2 px-4 border-b border-yellow-200 text-blue-900">Instansi</th>
-              <th className="py-2 px-4 border-b border-yellow-200 text-blue-900">Provinsi</th>
+              <th className="py-2 px-4 border-b border-blue-100 text-blue-900">No</th>
+              <th className="py-2 px-4 border-b border-blue-100 text-blue-900">Nama</th>
+              <th className="py-2 px-4 border-b border-blue-100 text-blue-900">Jenjang</th>
+              <th className="py-2 px-4 border-b border-blue-100 text-blue-900">Instansi</th>
+              <th className="py-2 px-4 border-b border-blue-100 text-blue-900">Provinsi</th>
             </tr>
           </thead>
           <tbody>
             {dataTable.map((row, idx) => (
-              <tr key={row.nama} className="hover:bg-yellow-50">
-                <td className="py-2 px-4 border-b border-yellow-100 text-blue-900">{idx+1}</td>
-                <td className="py-2 px-4 border-b border-yellow-100 text-blue-700 font-semibold cursor-pointer underline" onClick={() => router.push(`/user/jumlah-ak/${row.id}`)}>{row.nama}</td>
-                <td className="py-2 px-4 border-b border-yellow-100 text-blue-900">{row.jenjang}</td>
-                <td className="py-2 px-4 border-b border-yellow-100 text-blue-900">{row.instansi}</td>
-                <td className="py-2 px-4 border-b border-yellow-100 text-blue-900">{row.provinsi}</td>
+              <tr key={row.nama} className="hover:bg-blue-50">
+                <td className="py-2 px-4 border-b border-blue-50 text-blue-900">{idx+1}</td>
+                <td className="py-2 px-4 border-b border-blue-50 text-blue-700 font-semibold cursor-pointer underline" onClick={() => router.push(`/user/jumlah-ak/${row.id}`)}>{row.nama}</td>
+                <td className="py-2 px-4 border-b border-blue-50 text-blue-900">{row.jenjang}</td>
+                <td className="py-2 px-4 border-b border-blue-50 text-blue-900">{row.instansi}</td>
+                <td className="py-2 px-4 border-b border-blue-50 text-blue-900">{row.provinsi}</td>
               </tr>
             ))}
           </tbody>
