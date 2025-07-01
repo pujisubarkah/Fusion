@@ -49,8 +49,8 @@ export default function Sidebar() {
           </button>
           {open === 'wi' && (
             <div className="ml-10 mt-2 flex flex-col gap-2 text-base font-normal">
-              <Link href="/jumlah-wi" className="px-2 py-1 rounded hover:bg-yellow-200 hover:text-blue-900 transition-colors">Jumlah</Link>
-              <Link href="/analytic-wi" className="px-2 py-1 rounded hover:bg-yellow-200 hover:text-blue-900 transition-colors">Data Analytic</Link>
+              <Link href="/user/widyaiswara" className="px-2 py-1 rounded hover:bg-yellow-200 hover:text-blue-900 transition-colors">Jumlah</Link>
+              <Link href="/user/analytic-wi" className="px-2 py-1 rounded hover:bg-yellow-200 hover:text-blue-900 transition-colors">Data Analytic</Link>
             </div>
           )}
         </div>

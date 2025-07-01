@@ -1,38 +1,84 @@
 "use client";
-import React, { useState } from "react";
-import { FiUsers, FiBarChart2, FiPieChart, FiUserPlus, FiX } from "react-icons/fi";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import React, { useState, useEffect } from "react";
+import { FiUsers, FiBarChart2, FiUserPlus, FiX } from "react-icons/fi";
+import { FaStar } from "react-icons/fa";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie, Legend } from "recharts";
 import { useRouter } from "next/navigation";
+import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 
-const jenjangData = [
-  { name: "Pertama", value: 5 },
-  { name: "Muda", value: 75 },
-  { name: "Madya", value: 45 },
-  { name: "Utama", value: 10 },
-];
-const COLORS = ["#2563eb", "#f472b6", "#fbbf24", "#22c55e"];
-const dataTable: Profile[] = [
-  { id: "1", nama: "Budi Santoso", jenjang: "Madya", instansi: "Kemenkeu", provinsi: "DKI Jakarta", nip: "19780101 200501 1 001", email: "budi@kemenkeu.go.id" },
-  { id: "2", nama: "Siti Aminah", jenjang: "Muda", instansi: "Kemendikbud", provinsi: "Jawa Barat", nip: "19800202 200601 2 002", email: "siti@kemdikbud.go.id" },
-  { id: "3", nama: "Andi Wijaya", jenjang: "Madya", instansi: "Kemenkes", provinsi: "Jawa Timur", nip: "19790505 200701 1 003", email: "andi@kemenkes.go.id" },
-  { id: "4", nama: "Rina Dewi", jenjang: "Pertama", instansi: "Kemenhub", provinsi: "Bali", nip: "19830510 201001 2 004", email: "rina@kemenhub.go.id" },
-  { id: "5", nama: "Dewi Lestari", jenjang: "Utama", instansi: "Kemenko PMK", provinsi: "Sumatera Utara", nip: "19761212 199901 2 005", email: "dewi@kemenkopmk.go.id" },
-];
+const JENJANG_BADGE = {
+  "Pertama": "bg-blue-100 text-blue-700 border-blue-300",
+  "Muda": "bg-green-100 text-green-700 border-green-300",
+  "Madya": "bg-red-100 text-red-700 border-red-300",
+  "Utama": "bg-sky-100 text-sky-700 border-sky-300",
+};
 
+// Tambahkan tipe PegawaiAPI
+interface PegawaiAPI {
+  id: string;
+  nama: string;
+  nip: string;
+  email: string;
+  jenjang?: { nm_jenjang: string };
+  instansi?: { nama_instansi: string; provinsi?: string };
+}
+
+function JenjangStars({ count }: { count: number }) {
+  return (
+    <span className="flex mb-1 text-yellow-400 text-2xl drop-shadow">
+      {Array.from({ length: count }).map((_, i) => (
+        <FaStar key={i} className={i > 0 ? "-ml-2" : ""} />
+      ))}
+    </span>
+  );
+}
+
+// Define the Profile type for selectedProfile
 type Profile = {
   id: string;
   nama: string;
+  nip: string;
+  email: string;
   jenjang: string;
   instansi: string;
   provinsi: string;
-  nip: string;
-  email: string;
 };
 
 export default function JenjangAKPage() {
   const [showModal, setShowModal] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
+  const [pegawai, setPegawai] = useState<PegawaiAPI[]>([]);
+  const [page, setPage] = useState(1);
+  const rowsPerPage = 20;
   const router = useRouter();
+
+  useEffect(() => {
+    fetch("/api/pegawai")
+      .then((res) => res.json())
+      .then((data) => setPegawai(data));
+  }, []);
+
+  // Hitung summary dan chart dari data pegawai
+  const jenjangList = ["Pertama", "Muda", "Madya", "Utama"];
+  const jenjangData = jenjangList.map((nm) => ({
+    name: nm,
+    value: pegawai.filter((p) => p.jenjang?.nm_jenjang === nm).length,
+  }));
+  const totalAK = pegawai.length;
+  const COLORS = ["#2563eb", "#22c55e", "#f87171", "#0ea5e9"];
+
+  // Data untuk tabel
+  const dataTable = pegawai.map((p) => ({
+    id: p.id,
+    nama: p.nama,
+    jenjang: p.jenjang?.nm_jenjang || "-",
+    instansi: p.instansi?.nama_instansi || "-",
+    provinsi: p.instansi?.provinsi || "-",
+    nip: p.nip,
+    email: p.email,
+  }));
+  const totalPages = Math.ceil(dataTable.length / rowsPerPage);
+  const pagedData = dataTable.slice((page-1)*rowsPerPage, page*rowsPerPage);
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -40,52 +86,98 @@ export default function JenjangAKPage() {
   };
 
   return (
-    <div className="p-8 flex flex-col gap-10 bg-gradient-to-br from-blue-50 via-white to-yellow-50 min-h-screen">
+    <div className="p-8 flex flex-col gap-10 min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 relative">
+      {/* Floating Add Button */}
+      <button
+        className="fixed bottom-8 right-8 z-40 flex items-center gap-2 bg-gradient-to-r from-blue-600 to-green-500 hover:scale-105 transition-transform text-white font-bold px-6 py-3 rounded-full shadow-2xl border-4 border-white/60 backdrop-blur-lg hover:shadow-blue-400/50"
+        onClick={() => alert('Fitur tambah data belum diimplementasikan.')}
+      >
+        <FiUserPlus className="text-2xl" /> Tambah Data
+      </button>
+
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-8 mb-4">
-        <div className="bg-gradient-to-br from-blue-200 to-blue-100 rounded-2xl p-8 flex items-center gap-6 shadow-lg border-2 border-blue-200">
-          <FiUsers className="text-4xl text-blue-700 drop-shadow" />
-          <div>
-            <div className="text-3xl font-extrabold text-blue-900">{jenjangData.reduce((a,b)=>a+b.value,0)}</div>
-            <div className="text-blue-800 font-semibold">Total AK</div>
-          </div>
+      <div className="grid grid-cols-1 sm:grid-cols-5 gap-6 mb-4">
+        <div className="bg-white/70 backdrop-blur-md rounded-2xl p-6 flex flex-col items-center gap-2 shadow-xl border-2 border-blue-200 hover:scale-105 transition-transform">
+          <FiUsers className="text-3xl text-blue-700 drop-shadow mb-1" />
+          <div className="text-3xl font-extrabold text-blue-900 animate-pulse">{totalAK}</div>
+          <div className="text-blue-800 font-semibold text-xs text-center">Total AK</div>
         </div>
-        {jenjangData.map((j, idx) => (
-          <div key={j.name} className={`bg-gradient-to-br from-blue-100 to-white rounded-2xl p-8 flex items-center gap-6 shadow-lg border-2 border-blue-200`}>
-            {idx===0 && <FiBarChart2 className="text-4xl text-blue-600 drop-shadow" />}
-            {idx===1 && <FiPieChart className="text-4xl text-pink-600 drop-shadow" />}
-            {idx===2 && <FiBarChart2 className="text-4xl text-yellow-600 drop-shadow" />}
-            {idx===3 && <FiPieChart className="text-4xl text-green-600 drop-shadow" />}
-            <div>
-              <div className="text-3xl font-extrabold" style={{ color: COLORS[idx] }}>{j.value}</div>
-              <div className="font-semibold text-blue-800">Jenjang {j.name}</div>
+        {jenjangData.map((j, idx) => {
+          return (
+            <div key={j.name} className="bg-gradient-to-br from-white/80 to-green-50 rounded-2xl p-6 flex flex-col items-center gap-2 shadow-xl border-2 border-blue-200 hover:scale-105 transition-transform">
+              <JenjangStars count={idx+1} />
+              <div className="text-2xl font-extrabold" style={{ color: COLORS[idx] }}>{j.value}</div>
+              <div className="font-semibold text-blue-800 text-xs text-center">{j.name}</div>
             </div>
+          );
+        })}
+      </div>
+
+      {/* Grafik Bar & Pie Jenjang */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Bar Chart */}
+        <div className="bg-white/90 rounded-2xl shadow-xl p-8 flex flex-col items-center border-t-4 border-2 border-blue-200 relative overflow-hidden hover:shadow-blue-200/80 transition-shadow">
+          <h3 className="font-bold text-xl mb-4 text-blue-900 z-10">Bar Chart Jumlah AK per Jenjang</h3>
+          <div className="w-full h-64 flex items-center justify-center text-gray-400 z-10">
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={jenjangData}>
+                <XAxis dataKey="name" />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Bar dataKey="value" fill="#2563eb">
+                  {jenjangData.map((entry, index) => (
+                    <Cell key={`cell-bar-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
           </div>
-        ))}
-      </div>
-
-      {/* Grafik Bar Jenjang */}
-      <div className="bg-white/90 rounded-2xl shadow-xl p-8 flex flex-col items-center border-t-4 border-2 border-blue-200 relative overflow-hidden">
-        <h3 className="font-bold text-xl mb-4 text-blue-900 z-10">Bar Chart Jumlah AK per Jenjang</h3>
-        <div className="w-full h-64 flex items-center justify-center text-gray-400 z-10">
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={jenjangData}>
-              <XAxis dataKey="name" />
-              <YAxis allowDecimals={false} />
-              <Tooltip />
-              <Bar dataKey="value" fill="#2563eb">
-                {jenjangData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
         </div>
-      </div>
-
-      {/* Button Input */}
-      <div className="flex justify-end mb-4">
-        <button className="flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-2 rounded-lg shadow border-2 border-blue-200 transition" onClick={() => alert('Fitur tambah data belum diimplementasikan.')}> <FiUserPlus /> Tambah Data Analis Kebijakan </button>
+        {/* Pie Chart */}
+        <div className="bg-white/90 rounded-2xl shadow-xl p-8 flex flex-col items-center border-t-4 border-2 border-blue-200 relative overflow-hidden hover:shadow-green-200/80 transition-shadow">
+          <h3 className="font-bold text-xl mb-4 text-green-700 z-10">Pie Chart Komposisi Jenjang AK</h3>
+          <div className="w-full h-64 flex items-center justify-center text-gray-400 z-10">
+            <ResponsiveContainer width="100%" height={220}>
+              <PieChart>
+                <defs>
+                  <linearGradient id="pie-blue" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#2563eb" stopOpacity={0.9}/>
+                    <stop offset="100%" stopColor="#60a5fa" stopOpacity={0.7}/>
+                  </linearGradient>
+                  <linearGradient id="pie-green" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#22c55e" stopOpacity={0.9}/>
+                    <stop offset="100%" stopColor="#bbf7d0" stopOpacity={0.7}/>
+                  </linearGradient>
+                  <linearGradient id="pie-red" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#f87171" stopOpacity={0.9}/>
+                    <stop offset="100%" stopColor="#fecaca" stopOpacity={0.7}/>
+                  </linearGradient>
+                  <linearGradient id="pie-sky" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#0ea5e9" stopOpacity={0.9}/>
+                    <stop offset="100%" stopColor="#bae6fd" stopOpacity={0.7}/>
+                  </linearGradient>
+                </defs>
+                <Pie
+                  data={jenjangData}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  label
+                >
+                  <Cell fill="url(#pie-blue)" />
+                  <Cell fill="url(#pie-green)" />
+                  <Cell fill="url(#pie-red)" />
+                  <Cell fill="url(#pie-sky)" />
+                </Pie>
+                <Legend />
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="mt-2 text-green-700 font-medium text-sm">Komposisi AK didominasi jenjang Muda dan Madya.</div>
+        </div>
       </div>
 
       {/* Table */}
@@ -102,11 +194,13 @@ export default function JenjangAKPage() {
             </tr>
           </thead>
           <tbody>
-            {dataTable.map((row, idx) => (
-              <tr key={row.nama} className="hover:bg-blue-50">
-                <td className="py-2 px-4 border-b border-blue-50 text-blue-900">{idx+1}</td>
+            {pagedData.map((row, idx) => (
+              <tr key={row.nama} className={`hover:bg-blue-50 transition-colors ${idx%2===1?"bg-blue-50/60":""}`}> 
+                <td className="py-2 px-4 border-b border-blue-50 text-blue-900">{(page-1)*rowsPerPage+idx+1}</td>
                 <td className="py-2 px-4 border-b border-blue-50 text-blue-700 font-semibold cursor-pointer underline" onClick={() => router.push(`/user/jumlah-ak/${row.id}`)}>{row.nama}</td>
-                <td className="py-2 px-4 border-b border-blue-50 text-blue-900">{row.jenjang}</td>
+                <td className="py-2 px-4 border-b border-blue-50">
+                  <span className={`inline-block px-3 py-1 rounded-full border text-xs font-bold shadow-sm ${JENJANG_BADGE[row.jenjang as keyof typeof JENJANG_BADGE]}`}>{row.jenjang}</span>
+                </td>
                 <td className="py-2 px-4 border-b border-blue-50 text-blue-900">{row.instansi}</td>
                 <td className="py-2 px-4 border-b border-blue-50 text-blue-900">{row.provinsi}</td>
               </tr>
@@ -115,16 +209,35 @@ export default function JenjangAKPage() {
         </table>
       </div>
 
+      {/* Pagination */}
+      <div className="flex justify-center mt-4">
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious onClick={() => setPage((p) => Math.max(1, p-1))} aria-disabled={page === 1} />
+            </PaginationItem>
+            <span className="px-4 py-2 text-blue-700 font-semibold select-none">Halaman {page} dari {totalPages}</span>
+            <PaginationItem>
+              <PaginationNext onClick={() => setPage((p) => Math.min(totalPages, p+1))} aria-disabled={page === totalPages} />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      </div>
+
       {/* Modal Profil */}
       {showModal && selectedProfile && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md relative">
-            <button className="absolute top-3 right-3 text-gray-500 hover:text-red-500" onClick={handleCloseModal}><FiX size={24} /></button>
-            <h2 className="text-2xl font-bold mb-2 text-blue-800">Profil Analis Kebijakan</h2>
-            <div className="mb-2"><span className="font-semibold text-blue-700">Nama:</span> {selectedProfile.nama}</div>
+          <div className="bg-white/95 rounded-2xl shadow-2xl p-8 w-full max-w-md relative backdrop-blur-xl border-4 border-blue-100">
+            <button className="absolute top-3 right-3 text-blue-500 hover:text-red-500 bg-white/70 rounded-full p-1 shadow" onClick={handleCloseModal}><FiX size={24} /></button>
+            <div className="flex flex-col items-center mb-4">
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-400 to-green-400 flex items-center justify-center text-white text-4xl font-bold shadow-lg mb-2">
+                {selectedProfile.nama.split(' ').map(n=>n[0]).join('').toUpperCase()}
+              </div>
+              <h2 className="text-2xl font-bold mb-1 text-blue-800">{selectedProfile.nama}</h2>
+              <div className="text-green-600 text-sm font-medium mb-2">{selectedProfile.jenjang}</div>
+            </div>
             <div className="mb-2"><span className="font-semibold text-blue-700">NIP:</span> {selectedProfile.nip}</div>
             <div className="mb-2"><span className="font-semibold text-blue-700">Email:</span> {selectedProfile.email}</div>
-            <div className="mb-2"><span className="font-semibold text-blue-700">Jenjang:</span> {selectedProfile.jenjang}</div>
             <div className="mb-2"><span className="font-semibold text-blue-700">Instansi:</span> {selectedProfile.instansi}</div>
             <div className="mb-2"><span className="font-semibold text-blue-700">Provinsi:</span> {selectedProfile.provinsi}</div>
           </div>

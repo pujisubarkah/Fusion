@@ -1,0 +1,135 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["public"]
+}
+
+model golongan {
+  id       Int       @id @default(autoincrement())
+  golongan String?
+  pegawai  pegawai[]
+
+  @@schema("public")
+}
+
+model instansi {
+  id                Int                @id
+  kode_instansi     Int?
+  nama_instansi     String?            @db.VarChar(226)
+  kat_instansi_id   Int?
+  kategori_instansi kategori_instansi? @relation(fields: [kat_instansi_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "constraint_1")
+  pegawai           pegawai[]
+
+  @@schema("public")
+}
+
+model jabfung {
+  id         Int       @id @default(autoincrement())
+  fungsional String?
+  pegawai    pegawai[]
+
+  @@schema("public")
+}
+
+model jalur {
+  id                 Int       @id @default(autoincrement())
+  jalur_pengangkatan String?
+  pegawai            pegawai[]
+
+  @@schema("public")
+}
+
+model jenjang {
+  id         Int       @id @default(autoincrement())
+  nm_jenjang String?
+  pegawai    pegawai[]
+
+  @@schema("public")
+}
+
+model jns_kelamin {
+  id          Int       @id @default(autoincrement())
+  jns_kelamin String?
+  pegawai     pegawai[]
+
+  @@schema("public")
+}
+
+model kategori_instansi {
+  id           Int        @id @default(autoincrement())
+  kat_instansi String?    @db.VarChar
+  instansi     instansi[]
+
+  @@schema("public")
+}
+
+model pegawai {
+  id             Int          @id @default(autoincrement())
+  nip            String?      @db.VarChar(32)
+  niakn          String?      @db.VarChar(32)
+  nama           String?
+  jns_kelamin_id Int?
+  golongan_id    Int?
+  jalur_id       Int?
+  jenjang_id     Int?
+  instansi_id    Int?
+  phone          String?
+  email          String?
+  nomor_surat    String?
+  tmt_pangkat    DateTime?    @db.Date
+  tmt_surat      DateTime?    @db.Date
+  unit_kerja     String?
+  photo          String?
+  Jabfung_id     Int?
+  pendidikan_id  Int?
+  jns_kelamin    jns_kelamin? @relation(fields: [jns_kelamin_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "constraint_1")
+  jabfung        jabfung?     @relation(fields: [Jabfung_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  golongan       golongan?    @relation(fields: [golongan_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  instansi       instansi?    @relation(fields: [instansi_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  jalur          jalur?       @relation(fields: [jalur_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  jenjang        jenjang?     @relation(fields: [jenjang_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  pendidikan     pendidikan?  @relation(fields: [pendidikan_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@schema("public")
+}
+
+model pendidikan {
+  id         Int       @id @default(autoincrement())
+  pendidikan String?
+  pegawai    pegawai[]
+
+  @@schema("public")
+}
+
+model role_id {
+  role_id                    Int     @id @default(autoincrement())
+  role_nama                  String? @db.VarChar
+  user_user_role_idTorole_id user[]  @relation("user_role_idTorole_id")
+
+  @@schema("public")
+}
+
+model status {
+  id     Int    @id @default(autoincrement())
+  status String @db.VarChar
+
+  @@schema("public")
+}
+
+model user {
+  id                            Int      @id(map: "User_pkey") @default(autoincrement())
+  role_id                       Int
+  nip                           Int
+  nama                          String   @db.VarChar
+  email                         String   @unique(map: "User_email_key")
+  password                      String
+  createdAt                     DateTime @default(now())
+  role_id_user_role_idTorole_id role_id  @relation("user_role_idTorole_id", fields: [role_id], references: [role_id], map: "User_role_id_fkey")
+
+  @@schema("public")
+}
