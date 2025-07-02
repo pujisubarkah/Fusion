@@ -52,6 +52,11 @@ export default function JenjangAKPage() {
   const rowsPerPage = 20;
   const router = useRouter();
 
+  // Filter states
+  const [filterNama, setFilterNama] = useState("");
+  const [filterJenjang, setFilterJenjang] = useState("");
+  const [filterProvinsi, setFilterProvinsi] = useState("");
+
   useEffect(() => {
     fetch("/api/pegawai")
       .then((res) => res.json())
@@ -77,8 +82,19 @@ export default function JenjangAKPage() {
     nip: p.nip,
     email: p.email,
   }));
-  const totalPages = Math.ceil(dataTable.length / rowsPerPage);
-  const pagedData = dataTable.slice((page-1)*rowsPerPage, page*rowsPerPage);
+
+  // Filtered data
+  const filteredData = dataTable.filter(row =>
+    (!filterNama || row.nama.toLowerCase().includes(filterNama.toLowerCase())) &&
+    (!filterJenjang || row.jenjang === filterJenjang) &&
+    (!filterProvinsi || row.provinsi === filterProvinsi)
+  );
+
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+  const pagedData = filteredData.slice((page-1)*rowsPerPage, page*rowsPerPage);
+
+  // Reset page to 1 if filter changes
+  useEffect(() => { setPage(1); }, [filterNama, filterJenjang, filterProvinsi]);
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -183,6 +199,41 @@ export default function JenjangAKPage() {
       {/* Table */}
       <div className="bg-white/90 rounded-2xl shadow-xl p-8 overflow-x-auto border-2 border-blue-200">
         <h3 className="font-bold text-xl mb-4 text-blue-700">Tabel Data Jenjang AK</h3>
+        {/* Filter Bar */}
+        <div className="flex flex-wrap gap-4 mb-6 items-center">
+          <input
+            type="text"
+            placeholder="Cari nama..."
+            className="px-3 py-2 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-blue-900 bg-white/80 shadow"
+            value={filterNama}
+            onChange={e => setFilterNama(e.target.value)}
+            style={{ minWidth: 180 }}
+          />
+          <select
+            className="px-3 py-2 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-blue-900 bg-white/80 shadow"
+            value={filterJenjang}
+            onChange={e => setFilterJenjang(e.target.value)}
+          >
+            <option value="">Semua Jenjang</option>
+            {jenjangList.map(j => <option key={j} value={j}>{j}</option>)}
+          </select>
+          <select
+            className="px-3 py-2 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-blue-900 bg-white/80 shadow"
+            value={filterProvinsi}
+            onChange={e => setFilterProvinsi(e.target.value)}
+          >
+            <option value="">Semua Provinsi</option>
+            {[...new Set(dataTable.map(d => d.provinsi).filter(Boolean))].sort().map(p => <option key={p} value={p}>{p}</option>)}
+          </select>
+          <button
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold shadow hover:bg-blue-600 transition"
+            onClick={() => {
+              setFilterNama("");
+              setFilterJenjang("");
+              setFilterProvinsi("");
+            }}
+          >Reset</button>
+        </div>
         <table className="min-w-full text-left border border-blue-200 rounded-xl overflow-hidden">
           <thead className="bg-blue-100 border-b-2 border-blue-200">
             <tr>
@@ -197,7 +248,12 @@ export default function JenjangAKPage() {
             {pagedData.map((row, idx) => (
               <tr key={row.nama} className={`hover:bg-blue-50 transition-colors ${idx%2===1?"bg-blue-50/60":""}`}> 
                 <td className="py-2 px-4 border-b border-blue-50 text-blue-900">{(page-1)*rowsPerPage+idx+1}</td>
-                <td className="py-2 px-4 border-b border-blue-50 text-blue-700 font-semibold cursor-pointer underline" onClick={() => router.push(`/user/jumlah-ak/${row.id}`)}>{row.nama}</td>
+                <td
+                  className="py-2 px-4 border-b border-blue-50 text-blue-700 font-semibold cursor-pointer underline"
+                  onClick={() => router.push(`/admin/jumlah-ak/${row.id}`)}
+                >
+                  {row.nama}
+                </td>
                 <td className="py-2 px-4 border-b border-blue-50">
                   <span className={`inline-block px-3 py-1 rounded-full border text-xs font-bold shadow-sm ${JENJANG_BADGE[row.jenjang as keyof typeof JENJANG_BADGE]}`}>{row.jenjang}</span>
                 </td>

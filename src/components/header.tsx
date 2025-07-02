@@ -1,10 +1,28 @@
 'use client';
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FiBell, FiUser } from "react-icons/fi";
 
 export default function Header() {
+  const [nama, setNama] = useState<string>("User");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const user = localStorage.getItem("user");
+      if (user) {
+        try {
+          const parsed = JSON.parse(user);
+          setNama(parsed.nama || "User");
+        } catch {
+          setNama("User");
+        }
+      } else {
+        setNama("User");
+      }
+    }
+  }, []);
+
   return (
-    <header className="w-full flex items-center justify-between px-8 py-4 bg-[#1e40af] shadow-md border-b-4 border-yellow-400 z-20">
+    <header className="w-full flex items-center justify-between px-8 py-4 bg-[#3781c7] shadow-md border-b-4 border-yellow-400 z-20">
       <div className="flex items-center gap-3">
         <span className="text-2xl font-extrabold text-yellow-400 tracking-widest">F</span>
         <span className="text-lg font-bold text-white">usion</span>
@@ -17,7 +35,7 @@ export default function Header() {
         </button>
         <button className="flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-400 text-blue-900 font-semibold hover:bg-white hover:text-blue-900 transition">
           <FiUser className="text-xl" />
-          <span>User</span>
+          <span>{nama}</span>
         </button>
       </div>
     </header>
