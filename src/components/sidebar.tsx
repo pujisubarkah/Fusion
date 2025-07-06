@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from "react";
-import { FiUserCheck, FiBookOpen, FiBarChart2, FiChevronDown } from "react-icons/fi";
+import { FiUserCheck, FiBookOpen, FiBarChart2, FiChevronDown, FiHome, FiSettings } from "react-icons/fi";
 import Link from "next/link";
 
 export default function Sidebar() {
@@ -11,67 +11,130 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="w-64 min-h-screen bg-[#3781c7] border-r border-blue-900 shadow-xl flex flex-col p-6 text-white relative overflow-hidden">
-      <div className="absolute -top-10 -left-10 w-40 h-40 bg-blue-300 opacity-20 rounded-full blur-2xl z-0" />
-      <div className="absolute bottom-0 right-0 w-32 h-32 bg-blue-800 opacity-30 rounded-full blur-2xl z-0" />
-      <h1 className="mb-2 tracking-widest text-yellow-400 drop-shadow z-10 flex items-end">
-        <span className="text-5xl font-extrabold leading-none">F</span>
-        <span className="text-lg font-bold ml-1 mb-1">usion</span>
-      </h1>
-      <div className="mb-8 text-white text-base font-medium tracking-wide z-10">
-        Fungsional Online
+    <aside className="w-72 min-h-screen bg-white shadow-lg flex flex-col p-8 text-gray-800 relative overflow-visible border-r border-gray-200">
+      {/* Background Decorations */}
+      <div className="absolute -top-20 -left-20 w-60 h-60 bg-gradient-to-r from-blue-100/40 to-blue-200/40 rounded-full blur-3xl" />
+      <div className="absolute top-1/2 -right-20 w-40 h-40 bg-gradient-to-l from-blue-50/60 to-blue-100/60 rounded-full blur-2xl" />
+      <div className="absolute bottom-0 left-1/2 w-80 h-20 bg-gradient-to-r from-blue-50/30 to-blue-100/30 rounded-full blur-xl" />
+      
+      {/* Logo Section */}
+      <div className="relative z-10 mb-8">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-md">
+            <span className="text-2xl font-black text-white">F</span>
+          </div>
+          <div>
+            <h1 className="text-3xl font-black text-blue-600">
+              FUSION
+            </h1>
+            <p className="text-xs text-blue-500 font-medium tracking-wider">FUNGSIONAL ONLINE</p>
+          </div>
+        </div>
+        <div className="h-1 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full shadow-sm"></div>
       </div>
-      <div className="border-b-4 border-yellow-400 w-full mb-4 z-10" />
-      <nav className="flex flex-col gap-4 text-lg font-semibold z-10">
+      {/* Navigation */}
+      <nav className="flex flex-col gap-3 text-base font-medium z-10 flex-1">
+        {/* Home Link */}
+        <Link href="/admin/home" className="group">
+          <div className="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 hover:bg-[#C2E7F6]/50 hover:shadow-sm border border-transparent hover:border-blue-200">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+              <FiHome className="text-white text-lg" />
+            </div>
+            <span className="group-hover:text-blue-700 transition-colors duration-300 text-gray-700">Dashboard</span>
+          </div>
+        </Link>
+
         {/* Analis Kebijakan */}
-        <div>
+        <div className="relative">
           <button
             onClick={() => handleToggle('ak')}
-            className="flex items-center gap-3 px-4 py-2 w-full rounded transition-colors hover:bg-yellow-400 hover:text-blue-900 shadow-md border-0 focus:outline-none"
+            className="group flex items-center gap-4 px-4 py-3 w-full rounded-xl transition-all duration-300 hover:bg-[#C2E7F6]/50 hover:shadow-sm border border-transparent hover:border-blue-200"
           >
-            <FiUserCheck className="text-2xl" /> Analis Kebijakan
-            <FiChevronDown className={`ml-auto transition-transform ${open === 'ak' ? 'rotate-180' : ''}`} />
+            <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+              <FiUserCheck className="text-white text-lg" />
+            </div>
+            <span className="group-hover:text-emerald-700 transition-colors duration-300 flex-1 text-left text-gray-700">Analis Kebijakan</span>
+            <FiChevronDown className={`transition-all duration-300 group-hover:text-emerald-700 ${open === 'ak' ? 'rotate-90 text-emerald-600' : 'rotate-0 text-gray-500'}`} />
           </button>
           {open === 'ak' && (
-            <div className="ml-10 mt-2 flex flex-col gap-2 text-base font-normal">
-              <Link href="/admin/jumlah-ak" className="px-2 py-1 rounded hover:bg-yellow-200 hover:text-blue-900 transition-colors">Jumlah AK</Link>
-              <Link href="/admin/analytic-ak" className="px-2 py-1 rounded hover:bg-yellow-200 hover:text-blue-900 transition-colors">Data Analytic</Link>
+            <div className="absolute left-full top-0 ml-2 w-56 bg-white border border-gray-200 rounded-xl shadow-xl py-2 z-[100] animate-fadeIn">
+              <Link href="/admin/jumlah-ak" className="group flex items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-emerald-50">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full group-hover:scale-150 transition-transform duration-200"></div>
+                <span className="text-sm group-hover:text-emerald-700 text-gray-600">Jumlah AK</span>
+              </Link>
+              <Link href="/admin/analytic-ak" className="group flex items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-emerald-50">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full group-hover:scale-150 transition-transform duration-200"></div>
+                <span className="text-sm group-hover:text-emerald-700 text-gray-600">Data Analytic</span>
+              </Link>
             </div>
           )}
         </div>
+
         {/* Widyaiswara */}
-        <div>
+        <div className="relative">
           <button
             onClick={() => handleToggle('wi')}
-            className="flex items-center gap-3 px-4 py-2 w-full rounded transition-colors hover:bg-yellow-400 hover:text-blue-900 shadow-md border-0 focus:outline-none"
+            className="group flex items-center gap-4 px-4 py-3 w-full rounded-xl transition-all duration-300 hover:bg-[#C2E7F6]/50 hover:shadow-sm border border-transparent hover:border-blue-200"
           >
-            <FiBookOpen className="text-2xl" /> Widyaiswara
-            <FiChevronDown className={`ml-auto transition-transform ${open === 'wi' ? 'rotate-180' : ''}`} />
+            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+              <FiBookOpen className="text-white text-lg" />
+            </div>
+            <span className="group-hover:text-purple-700 transition-colors duration-300 flex-1 text-left text-gray-700">Widyaiswara</span>
+            <FiChevronDown className={`transition-all duration-300 group-hover:text-purple-700 ${open === 'wi' ? 'rotate-90 text-purple-600' : 'rotate-0 text-gray-500'}`} />
           </button>
           {open === 'wi' && (
-            <div className="ml-10 mt-2 flex flex-col gap-2 text-base font-normal">
-              <Link href="/user/widyaiswara" className="px-2 py-1 rounded hover:bg-yellow-200 hover:text-blue-900 transition-colors">Jumlah</Link>
-              <Link href="/user/analytic-wi" className="px-2 py-1 rounded hover:bg-yellow-200 hover:text-blue-900 transition-colors">Data Analytic</Link>
+            <div className="absolute left-full top-0 ml-2 w-56 bg-white border border-gray-200 rounded-xl shadow-xl py-2 z-[100] animate-fadeIn">
+              <Link href="/admin/widyaiswara" className="group flex items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-purple-50">
+                <div className="w-2 h-2 bg-purple-500 rounded-full group-hover:scale-150 transition-transform duration-200"></div>
+                <span className="text-sm group-hover:text-purple-700 text-gray-600">Jumlah</span>
+              </Link>
+              <Link href="/admin/analytic-wi" className="group flex items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-purple-50">
+                <div className="w-2 h-2 bg-purple-500 rounded-full group-hover:scale-150 transition-transform duration-200"></div>
+                <span className="text-sm group-hover:text-purple-700 text-gray-600">Data Analytic</span>
+              </Link>
             </div>
           )}
         </div>
+
         {/* Analis Bangkom */}
-        <div>
+        <div className="relative">
           <button
             onClick={() => handleToggle('ab')}
-            className="flex items-center gap-3 px-4 py-2 w-full rounded transition-colors hover:bg-yellow-400 hover:text-blue-900 shadow-md border-0 focus:outline-none"
+            className="group flex items-center gap-4 px-4 py-3 w-full rounded-xl transition-all duration-300 hover:bg-[#C2E7F6]/50 hover:shadow-sm border border-transparent hover:border-blue-200"
           >
-            <FiBarChart2 className="text-2xl" /> Analis Bangkom
-            <FiChevronDown className={`ml-auto transition-transform ${open === 'ab' ? 'rotate-180' : ''}`} />
+            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+              <FiBarChart2 className="text-white text-lg" />
+            </div>
+            <span className="group-hover:text-orange-700 transition-colors duration-300 flex-1 text-left text-gray-700">Analis Bangkom</span>
+            <FiChevronDown className={`transition-all duration-300 group-hover:text-orange-700 ${open === 'ab' ? 'rotate-90 text-orange-600' : 'rotate-0 text-gray-500'}`} />
           </button>
           {open === 'ab' && (
-            <div className="ml-10 mt-2 flex flex-col gap-2 text-base font-normal">
-              <Link href="/jumlah-ab" className="px-2 py-1 rounded hover:bg-yellow-200 hover:text-blue-900 transition-colors">Jumlah</Link>
-              <Link href="/analytic-ab" className="px-2 py-1 rounded hover:bg-yellow-200 hover:text-blue-900 transition-colors">Data Analytic</Link>
+            <div className="absolute left-full top-0 ml-2 w-56 bg-white border border-gray-200 rounded-xl shadow-xl py-2 z-[100] animate-fadeIn">
+              <Link href="/admin/jumlah-ab" className="group flex items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-orange-50">
+                <div className="w-2 h-2 bg-orange-500 rounded-full group-hover:scale-150 transition-transform duration-200"></div>
+                <span className="text-sm group-hover:text-orange-700 text-gray-600">Jumlah</span>
+              </Link>
+              <Link href="/admin/analytic-ab" className="group flex items-center gap-3 px-4 py-3 transition-all duration-200 hover:bg-orange-50">
+                <div className="w-2 h-2 bg-orange-500 rounded-full group-hover:scale-150 transition-transform duration-200"></div>
+                <span className="text-sm group-hover:text-orange-700 text-gray-600">Data Analytic</span>
+              </Link>
             </div>
           )}
         </div>
       </nav>
+
+      {/* Footer */}
+      <div className="relative z-10 mt-8 pt-6 border-t border-gray-200">
+        <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gray-50 border border-gray-200">
+          <div className="w-8 h-8 bg-gradient-to-br from-gray-400 to-gray-500 rounded-lg flex items-center justify-center">
+            <FiSettings className="text-white text-sm" />
+          </div>
+          <div className="flex-1">
+            <p className="text-xs text-gray-600 font-medium">System v2.0</p>
+            <p className="text-xs text-gray-500">Admin Panel</p>
+          </div>
+        </div>
+      </div>
     </aside>
   );
 }

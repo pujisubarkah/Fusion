@@ -1,50 +1,97 @@
-import { BarChart2, Users, Bell, Activity, UserCheck } from 'lucide-react';
+import { Users, Bell, Activity, UserCheck, Sparkles, TrendingUp } from 'lucide-react';
 
 export default function AdminHomePage() {
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold text-[#003366] mb-4">Dashboard Admin</h1>
-      <div className="bg-white rounded-xl shadow p-6 mb-6 border-l-4 border-yellow-400">
-        <p className="text-lg text-gray-700 mb-2">Selamat datang di halaman admin FUSION!</p>
-        <p className="text-gray-500">Gunakan menu di sidebar untuk mengelola data, melihat analitik, dan fitur admin lainnya.</p>
+    <div className="p-8 min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 relative overflow-hidden">
+      {/* Background Decorations */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-l from-blue-200/20 to-transparent rounded-full blur-3xl -z-10"></div>
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-r from-green-200/20 to-transparent rounded-full blur-3xl -z-10"></div>
+      
+      {/* Header */}
+      <div className="mb-8">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-green-500 rounded-xl flex items-center justify-center shadow-lg">
+            <Sparkles className="text-white w-6 h-6" />
+          </div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-700 via-blue-600 to-green-600 bg-clip-text text-transparent">
+            Dashboard Admin
+          </h1>
+        </div>
+        
+        {/* Welcome Card */}
+        <div className="bg-gradient-to-r from-white/80 via-blue-50/80 to-green-50/80 backdrop-blur-lg rounded-2xl shadow-xl p-8 border border-white/20 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-l from-yellow-300/20 to-transparent rounded-full blur-2xl"></div>
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-2 h-8 bg-gradient-to-b from-yellow-400 to-orange-400 rounded-full"></div>
+              <h2 className="text-2xl font-bold text-gray-800">Selamat datang di FUSION!</h2>
+            </div>
+            <p className="text-gray-600 text-lg leading-relaxed">
+              Kelola data, pantau analitik, dan akses fitur admin dengan mudah melalui dashboard yang intuitif.
+            </p>
+          </div>
+        </div>
       </div>
-      {/* Statistik Card */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="flex items-center gap-4 bg-blue-50 rounded-xl p-6 shadow border border-blue-100 hover:scale-105 transition-transform">
-          <div className="bg-blue-200 text-blue-700 rounded-full p-3 shadow">
-            <Users className="w-8 h-8" />
+      {/* Statistik Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {/* Total User Card */}
+        <div className="group relative bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
+          <div className="relative z-10 flex items-center justify-between">
+            <div>
+              <div className="text-4xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">120</div>
+              <div className="text-blue-100 font-semibold">Total User</div>
+            </div>
+            <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 group-hover:rotate-12 transition-transform duration-300">
+              <Users className="w-8 h-8 text-white" />
+            </div>
           </div>
-          <div>
-            <div className="text-3xl font-extrabold text-blue-900 mb-1">120</div>
-            <div className="text-blue-700 font-semibold">Total User</div>
-          </div>
+          <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-300 to-blue-200"></div>
         </div>
-        <div className="flex items-center gap-4 bg-green-50 rounded-xl p-6 shadow border border-green-100 hover:scale-105 transition-transform">
-          <div className="bg-green-200 text-green-700 rounded-full p-3 shadow">
-            <BarChart2 className="w-8 h-8" />
+
+        {/* Data Baru Card */}
+        <div className="group relative bg-gradient-to-br from-green-500 to-green-600 rounded-2xl p-6 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
+          <div className="relative z-10 flex items-center justify-between">
+            <div>
+              <div className="text-4xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">45</div>
+              <div className="text-green-100 font-semibold">Data Baru Bulan Ini</div>
+            </div>
+            <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 group-hover:rotate-12 transition-transform duration-300">
+              <TrendingUp className="w-8 h-8 text-white" />
+            </div>
           </div>
-          <div>
-            <div className="text-3xl font-extrabold text-green-900 mb-1">45</div>
-            <div className="text-green-700 font-semibold">Data Baru Bulan Ini</div>
-          </div>
+          <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-green-300 to-green-200"></div>
         </div>
-        <div className="flex items-center gap-4 bg-yellow-50 rounded-xl p-6 shadow border border-yellow-200 hover:scale-105 transition-transform">
-          <div className="bg-yellow-200 text-yellow-700 rounded-full p-3 shadow">
-            <Bell className="w-8 h-8" />
+
+        {/* Notifikasi Card */}
+        <div className="group relative bg-gradient-to-br from-yellow-500 to-orange-500 rounded-2xl p-6 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
+          <div className="relative z-10 flex items-center justify-between">
+            <div>
+              <div className="text-4xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">7</div>
+              <div className="text-yellow-100 font-semibold">Notifikasi Penting</div>
+            </div>
+            <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 group-hover:rotate-12 transition-transform duration-300">
+              <Bell className="w-8 h-8 text-white animate-pulse" />
+            </div>
           </div>
-          <div>
-            <div className="text-3xl font-extrabold text-yellow-700 mb-1">7</div>
-            <div className="text-yellow-700 font-semibold">Notifikasi Penting</div>
-          </div>
+          <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-300 to-orange-300"></div>
         </div>
-        <div className="flex items-center gap-4 bg-purple-50 rounded-xl p-6 shadow border border-purple-100 hover:scale-105 transition-transform">
-          <div className="bg-purple-200 text-purple-700 rounded-full p-3 shadow">
-            <UserCheck className="w-8 h-8" />
+
+        {/* User Aktif Card */}
+        <div className="group relative bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-6 shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
+          <div className="relative z-10 flex items-center justify-between">
+            <div>
+              <div className="text-4xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">32</div>
+              <div className="text-purple-100 font-semibold">User Aktif Hari Ini</div>
+            </div>
+            <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 group-hover:rotate-12 transition-transform duration-300">
+              <UserCheck className="w-8 h-8 text-white" />
+            </div>
           </div>
-          <div>
-            <div className="text-3xl font-extrabold text-purple-900 mb-1">32</div>
-            <div className="text-purple-700 font-semibold">User Aktif Hari Ini</div>
-          </div>
+          <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-purple-300 to-purple-200"></div>
         </div>
       </div>
       {/* Recent Activity */}

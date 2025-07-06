@@ -26,7 +26,8 @@ export async function POST(request: Request) {
     }
 
     // Jangan kirim password ke client
-    const { password: _password, ...userData } = user
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _userPassword, ...userData } = user
 
     return NextResponse.json({
       message: 'Login berhasil!',
