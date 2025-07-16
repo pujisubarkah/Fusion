@@ -126,11 +126,11 @@ export default function HomePage() {
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
               Selamat Datang di{' '}
               <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
-                FUSION
+                DEWABRATA
               </span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Sistem Informasi Manajemen Data Fungsional untuk Analis Kebijakan, Widyaiswaran dan Analis Pengembambangan Kompetensi ASN. 
+             "Data Elektroinik Widyaiswara, Analis Bangkom, dan Analis Kebijakan Terintegrasi". 
               Kelola data pegawai, pantau jenjang karir, dan analisis kinerja dalam satu platform terintegrasi.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
