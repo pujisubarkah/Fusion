@@ -130,7 +130,7 @@ export default function HomePage() {
               </span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Sistem Informasi Manajemen Data Fungsional untuk Analis Kebijakan. 
+              Sistem Informasi Manajemen Data Fungsional untuk Analis Kebijakan, Widyaiswaran dan Analis Pengembambangan Kompetensi ASN. 
               Kelola data pegawai, pantau jenjang karir, dan analisis kinerja dalam satu platform terintegrasi.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
